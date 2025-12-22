@@ -80,6 +80,23 @@ The training of YoloV8n model was done for 100 epochs and was completed in 2.719
 ![Alt text](output/output_yolov8n_100e/construction-safety.jpg)
 ![Alt text](output/output_yolov8n_100e/portrait-of-woman-with-mask-and-man-with-safety-glasses-on-a-construction-HX01FH.jpg)
 ![Alt text](output/output_yolov8n_100e/two-young-construction-workers-wearing-555864.jpg)
+## How to Run
+
+### 1. Requirements
+Ensure you have the required libraries installed:
+```bash
+pip install ultralytics opencv-python
+```
+
+### 2. Run Webcam Inference
+To run the PPE detection model using your webcam, execute the following command:
+```bash
+python webcam_inference.py
+```
+- The script will load the `models/best.pt` model.
+- It will open your default webcam (source 0).
+- Press **'q'** to exit the application.
+
 ## Future Work
 
 1. Train the model for more epochs.
