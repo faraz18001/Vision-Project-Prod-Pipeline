@@ -1,7 +1,7 @@
 import cv2
 from ultralytics import YOLO
 
-def run_webcam_inference(model_path='models/best.pt'):
+def run_webcam_inference(model_path='models/refined.pt'):
     # Load the trained YOLOv8 model
     try:
         model = YOLO(model_path)
