@@ -12,9 +12,10 @@ def train_merged_model():
     # imgsz=640 is standard for YOLOv8n
     results = model.train(
         data='data/merged_data.yaml',
-        epochs=10,  # Small number of epochs for quick demonstration/fine-tuning
+        epochs=50,  # Increased to 50 epochs for better convergence, as requested
         imgsz=640,
-        batch=16,
+        batch=64,   # Increased batch size to 64 to utilize ~5-6GB VRAM on T4 GPU
+        workers=8,  # Optimized data loading for faster training
         name='ppe_chair_refined'
     )
     

@@ -1,7 +1,7 @@
 import cv2
 from ultralytics import YOLO
 
-def run_webcam_inference(model_path='models/refined.pt'):
+def run_webcam_inference(model_path='models/best.pt', camera_index=0):
     # Load the trained YOLOv8 model
     try:
         model = YOLO(model_path)
@@ -10,8 +10,9 @@ def run_webcam_inference(model_path='models/refined.pt'):
         print(f"Error loading model: {e}")
         return
 
-    # Open the default webcam (source 0)
-    cap = cv2.VideoCapture(0)
+    # Open the webcam with DirectShow backend for better Windows compatibility
+    print(f"Attempting to open camera {camera_index}...")
+    cap = cv2.VideoCapture(camera_index, cv2.CAP_DSHOW)
 
     if not cap.isOpened():
         print("Error: Could not open webcam.")

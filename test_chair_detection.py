@@ -2,7 +2,7 @@ import os
 import cv2
 from ultralytics import YOLO
 
-def test_chair_detection(model_path='models/refined.pt', dataset_path='chair-dataset/train/images', num_samples=10):
+def test_chair_detection(model_path='models/best.pt', dataset_path='chair-dataset/train/images', num_samples=10):
     # Load the trained YOLOv8 model
     try:
         model = YOLO(model_path)
@@ -20,7 +20,7 @@ def test_chair_detection(model_path='models/refined.pt', dataset_path='chair-dat
     #image_files = [f for f in os.listdir(dataset_path) if f.lower().endswith(('.png', '.jpg', '.jpeg'))]
 
 
-    image_files=["chair-dataset/train/images/newofficechair.png"]
+    image_files=["chair-dataset/train/images/newchairs.png"]
     
     if not image_files:
         print("No images found in the dataset directory.")
