@@ -120,9 +120,15 @@ venv.bak/
 
 # Project Specific - Datasets
 chair-dataset/
+chair/
+chair_with_person/
 constructiondataset/
 merged-dataset/
 data/
+
+# Training outputs
+runs/
+output_detections/
 
 # OS specific
 .DS_Store
@@ -135,3 +141,6 @@ Thumbs.db
 
 # Drive temporary upload files
 .tmp.driveupload/
+
+# Large files
+assets.zip

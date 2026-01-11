@@ -1,105 +1,100 @@
-# PPE Detection for Construction Site Safety using YoloV8
-![Alt text](assets/videoconstruc2.gif)
-> 4,764 workers died on the job in 2020 (3.4 per 100,000 full-time equivalent workers). Workers in transportation and material moving occupations and construction and extraction occupations accounted for nearly half of all fatal occupational injuries (47.4 percent), representing 1,282 and 976 workplace deaths, respectively. 
->
-> *Occupational Safety and Health Administration (US Department of Labour)*
+# YOLOv8 Object Detection - Iterative Training Framework
 
+A flexible object detection project built on YOLOv8 that allows you to **retrain and refine** the model to detect new objects over time.
 
-## Introduction
+![Detection Demo](assets/videoconstruc2.gif)
 
-There have been various accidents in construction sites, due to the lack of safety equipments for workers. The aim of this project was to detect PPE on a worker, which can be further used for tracking and triggerring alarm (safety monitoring) in future. We use the dataset provided by Roboflow on [**Construction Site Safety Image Dataset**](https://universe.roboflow.com/roboflow-universe-projects/construction-site-safety). 
+## About This Project
 
-For easier use the dataset is already uploaded here: [**Kaggle Dataset**](https://www.kaggle.com/datasets/snehilsanyal/construction-site-safety-image-dataset-roboflow).
+This project started as a PPE (Personal Protective Equipment) detection model for construction sites. The key feature is the **iterative training workflow** - you can keep refining the model to detect new classes without starting from scratch.
 
-The dataset consists of 2801 image samples with labels in YoloV8 format. These images are split into `train: 2605`, `valid: 114` and `test: 82` sets. Each folder consists of `images` and `labels` folders.
+For example, the original model detected:
+- Hardhat, Mask, Safety Vest, Safety Cone, Person, Machinery, Vehicle
 
-There are 10 classes to detect from the dataset: 
+After refinement training, I added:
+- **Chair detection** - by collecting new data and retraining using the notebooks in this repo
 
-**'Hardhat', 'Mask', 'NO-Hardhat', 'NO-Mask', 'NO-Safety Vest', 'Person', 'Safety Cone', 'Safety Vest', 'machinery', 'vehicle'**
+This makes the model adaptable for different use cases where you need to add new detection classes over time.
 
-
-![](assets/ppe.webp)
-
-
-## Setup
-
-The code was run on Kaggle, with a P100 GPU. We installed the `ultralytics` library by [**Ultralytics**](https://docs.ultralytics.com) to run YoloV8 custom object detection on the dataset.
-
-For more information check out this notebook: [**Check yo'self before you wreck yo'self - CSS EDA**](https://www.kaggle.com/code/snehilsanyal/check-yo-self-before-you-wreck-yo-self-css-eda). 
-
-**Note:** This repository contains all the results, visualizations and best model after custom training on the dataset.
-
-## File Hierarchy
-
-1. `data` folder consists of the yaml file required for training. It also contains 3 folders `train`, `valid` and `test`. Each of these folders have 2 subfolders `images` (with .jpg files) and `labels` (with .txt annotations).
-2. `results` folder consists of the prediction results of the model, confusion matrix plot, visualizations of the train and valid batches and PR curves.
-3. `models` folder consists of 2 models, `yolov8n.pt` which is the pre-trained model on COCO128.yaml and `best.pt` which is the custom trained yolov8n model on our dataset.
-4. `source_files` folder consists of videos and images for evaluation of our custom trained model.
-5. `output` folder consists of output produced by our custom object detection model after 100 epochs of training.
-
-
-
-## Code
+## Project Structure
 
 ```
-├───.ipynb_checkpoints
-├───assets
-├───data
-├───├──data.yaml
-├───├──ppe_data.yaml
-│   ├───test
-│   │   ├───images
-│   │   └───labels
-│   ├───train
-│   │   ├───images
-│   │   └───labels
-│   └───valid
-│       ├───images
-│       └───labels
-├───models
-├───output
-│   └───output_yolov8n_100e
-├───results
-└───source_files
+├── models/
+│   ├── best.pt          # Original trained model
+│   ├── refined.pt       # Refined model with new classes
+│   └── yolov8n.pt       # Base YOLOv8 nano model
+├── notebooks/
+│   ├── colab_training.ipynb    # Training on Google Colab
+│   └── kaggle-training.ipynb   # Training on Kaggle
+├── results/             # Training metrics and visualizations
+├── output/              # Detection output examples
+├── source_files/        # Test images and videos
+├── assets/              # README images
+├── webcam_inference.py  # Real-time webcam detection
+├── train_merged.py      # Local training script
+├── merge_datasets.py    # Tool to merge multiple datasets
+└── training_guide.md    # Step-by-step training instructions
 ```
 
-## Results
+## How to Use
 
-The training of YoloV8n model was done for 100 epochs and was completed in 2.719 hours. After training, we get the following results:
-
-![Alt text](results/confusion_matrix.png)
-
-![Alt text](results/train_batch14672.jpg)
-
-![Alt text](results/val_batch2_pred.jpg)
-
-![Alt text](results/results.png)
-
-## Outputs
-
-![Alt text](output/output_yolov8n_100e/construction-safety.jpg)
-![Alt text](output/output_yolov8n_100e/portrait-of-woman-with-mask-and-man-with-safety-glasses-on-a-construction-HX01FH.jpg)
-![Alt text](output/output_yolov8n_100e/two-young-construction-workers-wearing-555864.jpg)
-## How to Run
-
-### 1. Requirements
-Ensure you have the required libraries installed:
+### 1. Install Dependencies
 ```bash
 pip install ultralytics opencv-python
 ```
 
-### 2. Run Webcam Inference
-To run the PPE detection model using your webcam, execute the following command:
+### 2. Run Webcam Detection
 ```bash
 python webcam_inference.py
 ```
-- The script will load the `models/best.pt` model.
-- It will open your default webcam (source 0).
-- Press **'q'** to exit the application.
+- Uses the `models/best.pt` model by default
+- Press **'q'** to exit
 
-## Future Work
+### 3. Retrain with New Classes
 
-1. Train the model for more epochs.
-2. Compare with 4 other models by YoloV8.
-3. Create ID tracking of workers and save bounding boxes of workers not wearing proper PPE.
-4. ML App deployment with alarm trigerring.
+To add new detection classes:
+
+1. Collect images of the new object
+2. Label them using a tool like Roboflow or LabelImg
+3. Use the notebooks in `notebooks/` to retrain:
+   - **Google Colab**: `notebooks/colab_training.ipynb`
+   - **Kaggle**: `notebooks/kaggle-training.ipynb`
+
+See `training_guide.md` for detailed step-by-step instructions.
+
+## Training Results
+
+### Confusion Matrix
+![Confusion Matrix](results/confusion_matrix.png)
+
+### Training Metrics
+![Results](results/results.png)
+
+### Sample Detections
+![Detection 1](output/output_yolov8n_100e/construction-safety.jpg)
+
+![Detection 2](output/output_yolov8n_100e/two-young-construction-workers-wearing-555864.jpg)
+
+## Current Detection Classes
+
+The refined model can detect:
+- Hardhat / NO-Hardhat
+- Mask / NO-Mask
+- Safety Vest / NO-Safety Vest
+- Person
+- Safety Cone
+- Machinery
+- Vehicle
+- Chair (added through refinement)
+
+## Training Workflow
+
+1. **Prepare Dataset** - Collect and label images for new classes
+2. **Merge Datasets** - Use `merge_datasets.py` to combine with existing data
+3. **Train on Cloud** - Use the notebooks for GPU-powered training
+4. **Get Model** - Download the new `best.pt` from training output
+5. **Test** - Run inference to verify the new detections work
+
+## License
+
+This project uses the YOLOv8 model by Ultralytics. The original PPE detection dataset is from [Roboflow Construction Site Safety Dataset](https://universe.roboflow.com/roboflow-universe-projects/construction-site-safety).
