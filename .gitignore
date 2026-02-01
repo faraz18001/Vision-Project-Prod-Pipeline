@@ -144,3 +144,19 @@ Thumbs.db
 
 # Large files
 assets.zip
+auto_labels.zip
+*.zip
+
+# More datasets and outputs
+auto_labels/
+new_images/
+sam_labels/
+roboflow_labels/
+output/
+results/
+
+# Virtual environment
+vision/
+
+# Model weights (optional - keep if you want to share)
+# models/
