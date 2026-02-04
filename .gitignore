@@ -160,3 +160,9 @@ vision/
 
 # Model weights (optional - keep if you want to share)
 # models/
+
+# Production Pipeline Data Folders
+1_raw_footage/
+2_processed_images/
+3_roboflow_upload/
+4_training_data/
