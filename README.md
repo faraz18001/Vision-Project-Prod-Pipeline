@@ -60,21 +60,6 @@ To add new detection classes:
    - **Google Colab**: `notebooks/colab_training.ipynb`
    - **Kaggle**: `notebooks/kaggle-training.ipynb`
 
-See `training_guide.md` for detailed step-by-step instructions.
-
-## Training Results
-
-### Confusion Matrix
-![Confusion Matrix](results/confusion_matrix.png)
-
-### Training Metrics
-![Results](results/results.png)
-
-### Sample Detections
-![Detection 1](output/output_yolov8n_100e/construction-safety.jpg)
-
-![Detection 2](output/output_yolov8n_100e/two-young-construction-workers-wearing-555864.jpg)
-
 ## Current Detection Classes
 
 The refined model can detect:
@@ -98,3 +83,4 @@ The refined model can detect:
 ## License
 
 This project uses the YOLOv8 model by Ultralytics. The original PPE detection dataset is from [Roboflow Construction Site Safety Dataset](https://universe.roboflow.com/roboflow-universe-projects/construction-site-safety).
+
