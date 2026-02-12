@@ -4,7 +4,7 @@ A real-time **PPE (Personal Protective Equipment)** detection system for constru
 
 ## Demo
 
-![PPE Detection Demo](assets/ppe_detection_demo.gif)
+![PPE Detection Demo](ppe_detection_demo.gif)
 
 ## Detection Classes
 
@@ -84,3 +84,4 @@ python images_to_video.py
 ## License
 
 This project uses the YOLOv8 model by [Ultralytics](https://ultralytics.com). The PPE detection dataset is from [Roboflow Construction Site Safety Dataset](https://universe.roboflow.com/roboflow-universe-projects/construction-site-safety).
+
