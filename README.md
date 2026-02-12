@@ -1,86 +1,86 @@
-# YOLOv8 Object Detection - Iterative Training Framework
+# Construction Site PPE Detection — YOLOv8
 
-A flexible object detection project built on YOLOv8 that allows you to **retrain and refine** the model to detect new objects over time.
+A real-time **PPE (Personal Protective Equipment)** detection system for construction sites, built on YOLOv8. The model detects **Hardhats**, **Persons**, and **Safety Vests** in images and video.
 
-![Detection Demo](assets/videoconstruc2.gif)
+## Demo
 
-## About This Project
+![PPE Detection Demo](assets/ppe_detection_demo.gif)
 
-This project started as a PPE (Personal Protective Equipment) detection model for construction sites. The key feature is the **iterative training workflow** - you can keep refining the model to detect new classes without starting from scratch.
+## Detection Classes
 
-For example, the original model detected:
-- Hardhat, Mask, Safety Vest, Safety Cone, Person, Machinery, Vehicle
+| Class ID | Class | Description |
+|---|---|---|
+| 0 | **Hardhat** | Safety helmet worn on head |
+| 1 | **Person** | Workers on site |
+| 2 | **Safety Vest** | High-visibility vest |
 
-After refinement training, I added:
-- **Chair detection** - by collecting new data and retraining using the notebooks in this repo
+## Model Performance
 
-This makes the model adaptable for different use cases where you need to add new detection classes over time.
+Trained on **2,700 images** (2,500 general PPE + 190 site-specific), fine-tuned YOLOv8 Nano:
+
+| Class | Precision | Recall | mAP50 |
+|---|---|---|---|
+| Hardhat | 91.9% | 77.2% | 85.6% |
+| Person | 89.5% | 72.3% | 82.9% |
+| Safety Vest | 100% | 87.6% | 92.5% |
+| **Overall** | **93.8%** | **79.0%** | **87.0%** |
 
 ## Project Structure
 
 ```
 ├── models/
-│   ├── best.pt          # Original trained model
-│   ├── refined.pt       # Refined model with new classes
-│   └── yolov8n.pt       # Base YOLOv8 nano model
+│   └── best.pt                # Trained YOLOv8n model (3 classes)
+├── footage/                   # Input videos
+├── annotated_videos/          # Output annotated videos
+├── annotated_output/          # Output annotated images
+├── data/                      # Dataset config (data.yaml)
 ├── notebooks/
-│   ├── colab_training.ipynb    # Training on Google Colab
-│   └── kaggle-training.ipynb   # Training on Kaggle
-├── results/             # Training metrics and visualizations
-├── output/              # Detection output examples
-├── source_files/        # Test images and videos
-├── assets/              # README images
-├── webcam_inference.py  # Real-time webcam detection
-├── train_merged.py      # Local training script
-├── merge_datasets.py    # Tool to merge multiple datasets
-└── training_guide.md    # Step-by-step training instructions
+│   ├── colab_training.ipynb   # Training on Google Colab
+│   └── kaggle-training.ipynb  # Training on Kaggle
+├── run_video_inference.py     # Video inference + saves annotated video
+├── batch_annotate.py          # Batch image annotation
+├── images_to_video.py         # Convert image folder to video
+├── filter_classes.py          # Filter dataset to specific classes
+└── assets/                    # README assets (GIFs, images)
 ```
 
-## How to Use
+## Quick Start
 
 ### 1. Install Dependencies
 ```bash
-pip install ultralytics opencv-python
+python -m venv vision
+source vision/bin/activate
+pip install -r requirements.txt
 ```
 
-### 2. Run Webcam Detection
+### 2. Run Video Inference
 ```bash
-python webcam_inference.py
+python run_video_inference.py
 ```
-- Uses the `models/best.pt` model by default
-- Press **'q'** to exit
+- Place a video file in `footage/`
+- Annotated video is saved to `annotated_videos/`
+- Press **'q'** or **ESC** to exit
 
-### 3. Retrain with New Classes
+### 3. Batch Annotate Images
+```bash
+python batch_annotate.py
+```
+- Place images in `trained_test/`
+- Annotated images are saved to `annotated_output/`
 
-To add new detection classes:
-
-1. Collect images of the new object
-2. Label them using a tool like Roboflow or LabelImg
-3. Use the notebooks in `notebooks/` to retrain:
-   - **Google Colab**: `notebooks/colab_training.ipynb`
-   - **Kaggle**: `notebooks/kaggle-training.ipynb`
-
-## Current Detection Classes
-
-The refined model can detect:
-- Hardhat / NO-Hardhat
-- Mask / NO-Mask
-- Safety Vest / NO-Safety Vest
-- Person
-- Safety Cone
-- Machinery
-- Vehicle
-- Chair (added through refinement)
+### 4. Convert Images to Video
+```bash
+python images_to_video.py
+```
 
 ## Training Workflow
 
-1. **Prepare Dataset** - Collect and label images for new classes
-2. **Merge Datasets** - Use `merge_datasets.py` to combine with existing data
-3. **Train on Cloud** - Use the notebooks for GPU-powered training
-4. **Get Model** - Download the new `best.pt` from training output
-5. **Test** - Run inference to verify the new detections work
+1. **Prepare Dataset** — Collect and label images on [Roboflow](https://roboflow.com) with 3 classes
+2. **Filter Classes** — Use `filter_classes.py` to reduce a multi-class dataset to the 3 target classes
+3. **Train on Cloud** — Use the notebooks for GPU-powered training (Colab/Kaggle)
+4. **Fine-tune** — Retrain with site-specific images using the existing model as base
+5. **Test** — Run inference to verify detections
 
 ## License
 
-This project uses the YOLOv8 model by Ultralytics. The original PPE detection dataset is from [Roboflow Construction Site Safety Dataset](https://universe.roboflow.com/roboflow-universe-projects/construction-site-safety).
-
+This project uses the YOLOv8 model by [Ultralytics](https://ultralytics.com). The PPE detection dataset is from [Roboflow Construction Site Safety Dataset](https://universe.roboflow.com/roboflow-universe-projects/construction-site-safety).
